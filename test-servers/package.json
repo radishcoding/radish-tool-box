@@ -1,0 +1,12 @@
+{
+  "name": "radish-test-servers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "请求调试板块手动测试用的本地服务器 (HTTP 回声/SSE/Socket.IO/gRPC)",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.12.0",
+    "@grpc/proto-loader": "^0.7.13",
+    "node-forge": "^1.3.1",
+    "socket.io": "^4.8.0"
+  }
+}

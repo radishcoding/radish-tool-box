@@ -1,0 +1,65 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Radish 示例 API", "version": "1.0.0" },
+  "servers": [{ "url": "https://httpbingo.org" }],
+  "paths": {
+    "/get": {
+      "get": {
+        "summary": "GET 回显查询参数",
+        "parameters": [
+          { "name": "q", "in": "query", "example": "hello" },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 2 }
+          }
+        ]
+      }
+    },
+    "/post": {
+      "post": {
+        "summary": "POST 回显请求体",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/User" }
+            }
+          }
+        }
+      }
+    },
+    "/headers": {
+      "get": {
+        "summary": "GET 回显请求头",
+        "parameters": [
+          {
+            "name": "X-Custom",
+            "in": "header",
+            "schema": { "type": "string", "default": "radish" }
+          }
+        ]
+      }
+    },
+    "/status/{code}": {
+      "get": {
+        "summary": "GET 返回指定状态码",
+        "parameters": [
+          { "name": "code", "in": "path", "required": true, "example": 404 }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "radish" },
+          "age": { "type": "integer", "example": 3 },
+          "active": { "type": "boolean", "default": true },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

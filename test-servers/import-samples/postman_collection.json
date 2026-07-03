@@ -1,0 +1,56 @@
+{
+  "info": {
+    "name": "Radish 示例集合",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [{ "key": "base", "value": "https://httpbingo.org" }],
+  "item": [
+    {
+      "name": "读取",
+      "item": [
+        {
+          "name": "GET 回显参数",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base}}/get?q=1&page=2" },
+            "header": [{ "key": "Accept", "value": "application/json" }]
+          }
+        },
+        {
+          "name": "GET 回显头",
+          "request": {
+            "method": "GET",
+            "url": "{{base}}/headers"
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST JSON (带鉴权)",
+      "request": {
+        "method": "POST",
+        "url": { "raw": "{{base}}/post" },
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "demo-token" }]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"radish\",\n  \"ok\": true\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"status 200\", () => pm.response.to.have.status(200));"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
