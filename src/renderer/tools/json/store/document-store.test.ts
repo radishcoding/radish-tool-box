@@ -176,6 +176,41 @@ describe("document-store 文本变换", () => {
     formatDocument(activeId);
     expect(useDocumentStore.getState().documents[0].text).toBe("}");
   });
+
+  it("clearDocument 清空文本并重置选中/展开/搜索", () => {
+    const { activeId, setText, expandAll, selectNode, setSearch } =
+      useDocumentStore.getState();
+    setText(activeId, '{"a":{"b":1}}');
+    expandAll(activeId);
+    const root = useDocumentStore.getState().documents[0].parseResult.root!;
+    selectNode(activeId, root.children[0]);
+    setSearch(activeId, "a", false);
+
+    useDocumentStore.getState().clearDocument(activeId);
+
+    const doc = useDocumentStore.getState().documents[0];
+    expect(doc.text).toBe("");
+    expect(doc.parseResult.root).toBeUndefined();
+    expect(doc.selectedKey).toBeUndefined();
+    expect(doc.expanded.size).toBe(0);
+    expect(doc.search.query).toBe("");
+    expect(doc.search.matchKeys).toHaveLength(0);
+    expect(doc.search.activeIndex).toBe(-1);
+  });
+
+  it("clearDocument 只影响目标文档", () => {
+    const { activeId, setText, newDocument } = useDocumentStore.getState();
+    setText(activeId, '{"a":1}');
+    newDocument();
+    const secondId = useDocumentStore.getState().activeId;
+    useDocumentStore.getState().setText(secondId, '{"b":2}');
+
+    useDocumentStore.getState().clearDocument(secondId);
+
+    const [first, second] = useDocumentStore.getState().documents;
+    expect(first.text).toBe('{"a":1}');
+    expect(second.text).toBe("");
+  });
 });
 
 describe("document-store 会话持久化", () => {

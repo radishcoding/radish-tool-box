@@ -167,3 +167,23 @@
   background-color: rgb(234 179 8 / 0.9);
   color: #000;
 }
+
+/*
+ * Monaco 控件提示 (查找框的上/下一个, 关闭等按钮) 由 hoverService 经 context-view 层渲染,
+ * 查找框贴着编辑器顶部时提示会翻到按钮上方并整体盖住按钮; 而纯文本提示在鼠标移入提示自身
+ * 时即销毁 (hideOnHover), 于是光标停在按钮上会陷入 "显示 -> 鼠标落入提示 -> 销毁 -> 再显示"
+ * 的闪烁循环, 按钮也因被遮挡而点不中. 让这类提示整层不接收指针事件即可同时消除闪烁与遮挡;
+ * pointer-events 可继承, 置于最外的 context-view 上才能连同其子树一并生效 (只设在内层的
+ * hover 容器上, 命中的仍是 context-view). 带操作条 (status-bar) 的提示需要点击交互, 排除在外.
+ */
+.context-view:has(.workbench-hover-container) {
+  pointer-events: none;
+}
+
+/*
+ * 例外: 带操作条的提示要能点击其中的动作, 恢复该层的命中.
+ * (两条选择器不可合并为 :has(...:not(:has(...))), :has() 不允许嵌套, 整条规则会被判为无效.)
+ */
+.context-view:has(.hover-row.status-bar) {
+  pointer-events: auto;
+}

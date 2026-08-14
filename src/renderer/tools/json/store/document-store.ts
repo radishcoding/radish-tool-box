@@ -94,6 +94,8 @@ export interface DocumentStore {
   sortKeysDocument: (id: string) => void;
   escapeDocument: (id: string) => void;
   unescapeDocument: (id: string) => void;
+  /** 清空文档的全部内容, 并一并重置其选中, 展开与搜索状态. */
+  clearDocument: (id: string) => void;
   setPathFormat: (format: PathFormat) => void;
   setPathPrefix: (value: boolean) => void;
   toggleCompare: () => void;
@@ -413,6 +415,16 @@ export const useDocumentStore = create<DocumentStore>()((set, get) => ({
       mapDocument(state, id, (doc) =>
         applyText(doc, unescapeJsonString(doc.text)),
       ),
+    ),
+
+  clearDocument: (id) =>
+    set((state) =>
+      mapDocument(state, id, (doc) => ({
+        ...applyText(doc, ""),
+        selectedKey: undefined,
+        expanded: new Set<string>(),
+        search: EMPTY_SEARCH,
+      })),
     ),
 
   setPathFormat: (format) => set({ pathFormat: format }),

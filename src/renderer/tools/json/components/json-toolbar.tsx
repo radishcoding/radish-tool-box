@@ -2,6 +2,7 @@ import {
   ChevronDown,
   ClipboardPaste,
   Columns2,
+  Eraser,
   ExternalLink,
   FolderOpen,
   Plus,
@@ -41,6 +42,7 @@ export function JsonToolbar(): ReactElement {
   const sortKeysDocument = useDocumentStore((state) => state.sortKeysDocument);
   const escapeDocument = useDocumentStore((state) => state.escapeDocument);
   const unescapeDocument = useDocumentStore((state) => state.unescapeDocument);
+  const clearDocument = useDocumentStore((state) => state.clearDocument);
   const expandAll = useDocumentStore((state) => state.expandAll);
   const openDocument = useDocumentStore((state) => state.openDocument);
   const compare = useDocumentStore((state) => state.compare);
@@ -120,6 +122,11 @@ export function JsonToolbar(): ReactElement {
           icon={ClipboardPaste}
           label="粘贴"
           onClick={() => void handlePaste()}
+        />
+        <IconAction
+          icon={Eraser}
+          label="清空"
+          onClick={() => clearDocument(activeId)}
         />
         <DropdownMenu
           onOpenChange={(open) => {
